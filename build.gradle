@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'org.jenkins-ci.jpi' version '0.52.0-rc.1'
+}
+
+group = 'org.jenkins-ci.plugins'
+version = '0.1-SNAPSHOT'
+description = 'OpenPipe =Es un plugin para escanear dependencias obsoletas en los proyectos de ' +
+        'python y generar pipelines.'
+
+repositories {
+    maven{
+
+        url "https://plugins.gradle.org/m2/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.jenkins-ci.main:jenkins-core:2.482'
+    compileOnly 'org.jenkins-ci.plugins:plugin:4.88'
+    compileOnly 'com.jcraft:jzlib:1.1.2' 
+    testImplementation 'junit:junit:4.13.2'
+}
+
+jenkinsPlugin {
+    shortName = 'openpipe'
+    displayName = 'OpenPipe Plugin'
+    url = 'https://github.com/Romeoteni188/openpipe'
+    jenkinsVersion = '2.482'
+    compatibleSinceVersion = '2.482'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+// Agrega la dependencia explícita aquí
+tasks.named('generateTestHpl') {
+    dependsOn 'processResources'
+}
+

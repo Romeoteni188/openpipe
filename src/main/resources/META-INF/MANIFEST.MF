@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Short-Name: OpenPipe Plugin
+Long-Name: OpenPipe Plugin for Jenkins
+Version: 1.0
+Hudson-Plugin-Version: 1.0
+Jenkins-Version: 2.235.1
+Plugin-Dependencies: some.plugin:1.0, another.plugin:2.0
+Author: Erwin Romeo Tiul Teni
+Description: Un plugin con fin de escanerar librerias, obsoletas de python y mostrar 
+la version actual para poder cambiar. 

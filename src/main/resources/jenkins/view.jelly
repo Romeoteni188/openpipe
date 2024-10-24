@@ -1,0 +1,149 @@
+<j:jelly xmlns:j="jelly:core">
+    <html lang="es">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Subir un Archivo o Repositorio</title>
+            <link rel="stylesheet" href="./css/estilo.css" />
+            <style>
+                /* Estilos para los botones */
+                button, .descarga {
+                background-color: #9814c5;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                cursor: pointer;
+                border-radius: 5px;
+                display: block;
+                text-align: center;
+                }
+
+                button:hover, .descarga:hover {
+                background-color: #7a10a0;
+                }
+
+                .descarga {
+                width: auto;
+                padding: 8px 16px;
+                margin-top: 20px;
+                display: none;
+                }
+
+                .progress-bar {
+                background-color: black;
+                color: white;
+                height: 25px;
+                width: 0%;
+                text-align: center;
+                line-height: 25px;
+                transition: width 0.5s;
+                }
+
+                .progress-container {
+                margin-bottom: 20px;
+                }
+
+                .reporte-container {
+                margin-top: 30px;
+                display: none;
+                }
+
+                .centered-content {
+                text-align: center;
+                }
+            </style>
+        </head>
+        <body>
+            <form method="POST" action="/uploadFile" enctype="multipart/form-data" id="uploadForm">
+                <h2>Subir un Archivo o Repositorio</h2>
+                <table>
+                    <tr>
+                        <td><label for="fileUpload">Selecciona un archivo:</label></td>
+                        <td><input type="file" id="fileUpload" name="fileUpload" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="fileType">Tipo de archivo:</label></td>
+                        <td>
+                            <select id="fileType" name="fileType">
+                                <option value="sourceCode">Código Fuente</option>
+                                <option value="configFile">Archivo de Configuración</option>
+                                <option value="logFile">Archivo de Registro</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="repoLink">Enlace al repositorio:</label></td>
+                        <td><input type="url" id="repoLink" name="repoLink" placeholder="https://github.com/usuario/repo" /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="generatePipeline">Generar archivo pipeline:</label></td>
+                        <td>
+                            <select id="generatePipeline" name="generatePipeline">
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button type="submit" id="submitButton">Subir Archivo o Repositorio</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+
+            <div class="progress-container" id="progressContainer" style="display: none;">
+                <div class="progress-bar" id="progressBar">0%</div>
+            </div>
+
+            <div class="centered-content">
+                <button id="downloadButton" class="descarga">Descargar Jenkinsfile</button>
+                <div class="reporte-container" id="reporteContainer">
+                    <h3>Reporte de Librerías</h3>
+                    <p id="reporte"></p>
+                </div>
+            </div>
+
+            <script>
+                const form = document.getElementById('uploadForm');
+                const progressBar = document.getElementById('progressBar');
+                const progressContainer = document.getElementById('progressContainer');
+                const downloadButton = document.getElementById('downloadButton');
+                const reporteContainer = document.getElementById('reporteContainer');
+                const reporteText = document.getElementById('reporte');
+
+                form.onsubmit = function(event) {
+                event.preventDefault();
+                progressContainer.style.display = 'block';
+                let progress = 0;
+                const interval = setInterval(() => {
+                if (progress &lt; 100) {
+                progress += 10;
+                progressBar.style.width = progress + '%';
+                progressBar.innerHTML = progress + '%';
+                } else {
+                clearInterval(interval);
+                downloadButton.style.display = 'inline-block';
+                reporteContainer.style.display = 'block';
+
+                const reporte = `
+                Librerías obsoletas:
+                - Librería1 v1.0 (Reemplazar por v2.0)
+                - Librería2 v3.4 (Reemplazar por v4.0)
+
+                Librerías actuales:
+                - Librería3 v5.0
+                - Librería4 v2.1
+                `;
+                reporteText.innerText = reporte;
+                }
+                }, 500);
+                };
+
+                downloadButton.onclick = function() {
+                window.location.href = '/downloadJenkinsfile';
+                };
+            </script>
+        </body>
+    </html>
+</j:jelly>
